@@ -1,3 +1,25 @@
+/** 
+	This is the character stats, for both enemies and characters including all 
+	stats, generation and attack damage.
+	Author Cathal O'Callaghan B00669476	
+	Copyright (c) [2019] [If(!Broken{don'tFixIt();}]
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+*/
+
 #include <iostream>
 #include "Character.h"
 #include "Item.h"
@@ -6,6 +28,7 @@
 using namespace std;
 
 // Here the Stats for Character are kept
+//
 void Character::generateCharacter()
 {
 	this->X = 10;
@@ -36,10 +59,13 @@ Character::Character(std::string name, bool aggro)
 	this->xp = 0;
 	this->xpNext = level*50;
 	this->hp = level*2+8;
-	this->hpMax = 1;
+	this->hpMax = level*2+8;
 	this->att = 1;
 	this->def = 1;
 	this->direction = 0;
+
+//If the player attacks it will trigger the aggro function
+//This will cause player threat to become true
 	
 	if (aggro)
 	{
@@ -47,48 +73,13 @@ Character::Character(std::string name, bool aggro)
 	}
 } 
 
-/*void Character::generateEnemy(int, bool aggro)
-{
-	this->enemyX = 17;
-	this->enemyY = 17;
-	this->enemyXp = 20;
-	this->enemyHp = 10;
-	this->enemyHpMax = 10;
-	this->enemyAtt = 1;
-	this->enemyDir = 0;
-	//this->enemyAggro = true;
-}
-
-/*void Enemy(int, bool aggro)
-{
-		this->enemyX = 17;
-		this->enemyY = 17;
-		this->enemyXp = 20;
-		this->enemyHp = 10;
-		this->enemyHpMax = 10;
-		this->enemyAtt = 1;
-		this->enemyDir = 0;
-		//this->enemyAggro = true;
-}*/
-
-
-/*int Character::enemyTakeDamage()
-{
-	
-	this-> enemyHp - (getAtt() + Weapon::GetDamage() );
-}*/
-
-/*int Character::playerTakeDamage()
-{
-	this-> hp - (getEnemyAtt() );
-}*/
-
-
 Character::~Character()
 {
 
 }
 //Functions below
+
+//This simply prints to screen and asks player for the character name
 void Character::namePlayer()
 {
 	cout << "Name your hero... ";
@@ -101,6 +92,8 @@ void Character::namePlayer()
 	str.at(1) = this->playerIcon;
 }*/
 
+//This function when run will return the character stats to their initial value
+//
 void Character::resetStat(const std::string name)
 {
 	this->playerName = "";
@@ -112,7 +105,6 @@ void Character::resetStat(const std::string name)
 	this->att = level +1;
 	this->def = level +1;
 	this->threat = true;
-	this->statPoints = 0;
 	this->direction = 0;
 }
 
@@ -121,6 +113,7 @@ void Character::resetAggro(const std::string name)
 	this->threat = true;
 }
 
+//This uses cout and pointers to display the value of each variable
 void Character::printStats() const
 {
 	cout<<"Name: " << this->playerName << endl;
@@ -133,20 +126,23 @@ void Character::printStats() const
 
 void Character::levelUp()
 {
+
 	if (this->xp >= this->xpNext)
+		//When player xp reached xp next will trigger level up
 	{
 		this->xp -= this->xpNext;
+		//triggers level to go up by one
 		this->level++;
 		this->xp = 0;
+		//as level has increased health and xp requ will go up
 		this->xpNext= this->level*50;
 		this->hpMax = this->level*2+8;
 		this->hp=hpMax;
-		this->statPoints++;
+		//cout display xp
 		cout << "You are now level " << this->level << "!!!" << endl;
 	}
 }
 		
-
 string Character::getPlayerName()
 {
 	//cout << this->playerName << endl;
@@ -199,16 +195,6 @@ int Character::getHp()
 	return hp;
 }
 
-int Character::getEnemyX()
-{
-	return enemyX;
-}
-
-int Character::getEnemyY()
-{
-	return enemyY;
-}
-
 int Character::getEnemyXp()
 {
 	return enemyXp;
@@ -228,17 +214,16 @@ int Character::getEnemyAtt()
 {
 	return enemyAtt;
 }
-
+//The enemy direction is described as listed as in the .h file
 int Character::getEnemyDir()
 {
 	return enemyDir;
 }
 
-
-// Jeremy
 void Character::move()
 {
-
+	//Makes uses of switches to change 
+	//the x and y using case. Case has been defined in the .h
 	switch (direction)
 	{
 	case UP: 
@@ -256,6 +241,7 @@ void Character::move()
 	}
 }
 
+//Sets input value as the set symbol
 void Character::setSymb(char symbol)
 {
 	this-> symbol = symbol;
@@ -272,28 +258,32 @@ int Character::getDir()
 	 newDir = this->direction ;
 
  }
-/* void Character::takeDamage(Character & me, Character & attacking , item & weapon )
+ //This will use the following functions to cause damage to each healthbar
+ void Character::TakeDamage(int damage)
  {
-	Weapon obj(int);
 	
-
-	this->hp/obj.GetDamage()
+	hp-= damage;
  }
- */
+ //damage for sword, pistol and shotgun are
+ //calculated by passing in Get Damage function which
+ //will vary depending on the weapon used
+ void Character::DealSwdDamage()
+ {
+	Sword bro;
+	int swd=bro.GetDamage();
+	TakeDamage(swd);
+ }
  
-/*void main()
-{
-	string name;
-	Character obj(name, false);
-	&Character::generateCharacter;
-	obj.getPlayerName();
-	obj.getLevel();
-	obj.getXp();
-	obj.getAtt();
-	obj.getDir();
+ void Character::DealPDamage()
+  {
+	Pistol guy;
+	int pis=guy.GetDamage();
+	TakeDamage(pis);
+  }
 
-
-	char dud;
-	cin >> dud;
-}
-*/
+ void Character::DealStgDamage()
+ {
+	 Shotgun man;
+	 int gun=man.GetDamage();
+	 TakeDamage(gun);
+ }

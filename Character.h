@@ -6,10 +6,8 @@
 #include <string>
 #include "Item.h"
 
+/**Definitions for each direction are set. These will be used later for movement*/
 
-//#include "LogAI.h"
-
-// J
 #define STOP 0
 #define UP 1
 #define DOWN 2
@@ -17,18 +15,23 @@
 #define RIGHT 4
 
 using namespace std;
-//CREATE DAMAGE FUNCTION
 
 class Character
 {
+	/**These functions are public and may be accessed outside of the file*/
 public:
+	/**This function constains the character stats when they are active*/
 	void generateCharacter();
-	Character(const std::string name, bool agro); // J, overloaded constructor
+	/**The below function is the constructor and initially defines the stats*/
+	Character(const std::string name, bool agro);
+	/**This contains enemy stats*/
 	int Character::Enemy(int, bool agro);
-	virtual ~Character();
-	void namePlayer();
 
-	//Functions for getting stats
+	virtual ~Character();
+
+	/**This function is used for naming the player*/
+	void namePlayer();
+	/**Functions for getting stats*/
 	int getX();
 	int getY();
 	string getPlayerName();
@@ -39,13 +42,9 @@ public:
 	int getHpMax();
 	int getAtt();
 	int getDef();
-	int getSpeed();
-	int getStatPoints();
 	int getDir();
 
-	//Get Enemy Stats
-	int getEnemyX();
-	int getEnemyY();
+	/**Get Enemy Stats*/
 	int getEnemyXp();
 	int getEnemyHp();
 	int getEnemyHpMax();
@@ -54,24 +53,43 @@ public:
 	bool enemyAggro();
 
 
-	//Additional functions
+	/**Additional functions
+	/This initialises stats which by resetting to default values
+	/used for game over*/
 	void resetStat(const std::string name);
+	/**When played xp reaches max for level, levels up and refills health*/
 	void levelUp();
+	/**Used for resetting health separate from all stats*/
 	void resetAggro(const std::string name);
+	/**Used to print all character stats to screen*/
 	void Character::printStats() const;
-	void createNewCharacter();// Create these Asap
-	void createNewEnemy();
-	char Character::getPlayerIcon(string str);
-	// J
-	void setSymb(char symbol); // CCreator.addEnemies(int) ->  G, R, B or Z  
-	void setDir(int newDir);
-	void takeDamage(Character & me, Character & attacking);// parse in weapon for damage modifier
-	void move();
 
-	int enemyTakeDamage();
-	int playerTakeDamage();
+	void createNewCharacter();
+	void createNewEnemy();
+	void generateEnemy();
+	void enemy();
+
+	/**Used to define what will be used for player icon*/
+	char Character::getPlayerIcon(string str);
+	
+	/**The set symb will set a value to a denoted value*/
+	void setSymb(char symbol); /** CCreator.addEnemies(int) ->  G, R, B or Z  
+	/**Used to set the new direction*/
+	void setDir(int newDir);
+	void takeDamage(Character & me, Character & attacking);/** parse in weapon for damage modifier*/
+	void move();
+	
+	/**Uses variables to have the player and enemy take damage*/
+	void TakeDamage(int damage);
+	void Character::DealSwdDamage();
+	void Character::DealPDamage();
+	void Character::DealStgDamage();
+	void Character::attackEnemy();
 
 private:
+	/**Below are private variables which may not be accessed
+	outside of the file
+	Player stats below*/
 	int X;
 	int Y;
 
@@ -83,10 +101,11 @@ private:
 	int hpMax;
 	int att;
 	int def;
-	
+	int direction;
 	int statPoints;
 	const char * playerIcon;
 
+	/**Enemy Stats below*/
 	int enemyX;
 	int enemyY;
 	int enemyXp;
@@ -94,24 +113,9 @@ private:
 	int enemyHpMax;
 	int enemyAtt;
 	int enemyDir;
-//	bool enemyAggro;
+/**	bool enemyAggro; */
 
-
-	// Jeremy
 	char symbol; // on map
 	bool threat;
-	int direction;
+	
 };
-
-
-
-
-
-/*int pressedKeys();
-	void setHealth(int newHP);
-	 use newHP value to change pointed to value of health
-	//enum eDirection { Up, Down, Left, Right, Stop = 0};
-	//eDirection dir;
-	//void move(enum dir);
-	//bool threat;
-	*/
