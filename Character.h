@@ -3,6 +3,18 @@
 #include <sstream>
 #include <vector>
 #include <iostream>
+#include <string>
+#include "Item.h"
+
+
+//#include "LogAI.h"
+
+// J
+#define STOP 0
+#define UP 1
+#define DOWN 2
+#define LEFT 3
+#define RIGHT 4
 
 using namespace std;
 //CREATE DAMAGE FUNCTION
@@ -10,13 +22,16 @@ using namespace std;
 class Character
 {
 public:
-	Character();
+	void generateCharacter();
+	Character(const std::string name, bool agro); // J, overloaded constructor
+	int Character::Enemy(int, bool agro);
 	virtual ~Character();
+	void namePlayer();
 
 	//Functions for getting stats
-	double getX();
-	double getY();
-	char getname();
+	int getX();
+	int getY();
+	string getPlayerName();
 	int getLevel();
 	int getXp();
 	int getXpNext();
@@ -26,23 +41,41 @@ public:
 	int getDef();
 	int getSpeed();
 	int getStatPoints();
-	
+	int getDir();
+
+	//Get Enemy Stats
+	int getEnemyX();
+	int getEnemyY();
+	int getEnemyXp();
+	int getEnemyHp();
+	int getEnemyHpMax();
+	int getEnemyAtt();
+	int getEnemyDir();
+	bool enemyAggro();
+
 
 	//Additional functions
 	void resetStat(const std::string name);
-	std::string getAsString() const;
 	void levelUp();
-
+	void resetAggro(const std::string name);
+	void Character::printStats() const;
 	void createNewCharacter();// Create these Asap
 	void createNewEnemy();
+	char Character::getPlayerIcon(string str);
+	// J
+	void setSymb(char symbol); // CCreator.addEnemies(int) ->  G, R, B or Z  
+	void setDir(int newDir);
+	void takeDamage(Character & me, Character & attacking);// parse in weapon for damage modifier
+	void move();
 
+	int enemyTakeDamage();
+	int playerTakeDamage();
 
 private:
-	double X;
-	double Y;
+	int X;
+	int Y;
 
-	std::string Character::name;
-	//char name;
+	string playerName;
 	int level;
 	int xp;
 	int xpNext;
@@ -50,25 +83,27 @@ private:
 	int hpMax;
 	int att;
 	int def;
-	int speed;
+	
 	int statPoints;
+	const char * playerIcon;
+
+	int enemyX;
+	int enemyY;
+	int enemyXp;
+	int enemyHp;
+	int enemyHpMax;
+	int enemyAtt;
+	int enemyDir;
+//	bool enemyAggro;
+
+
+	// Jeremy
+	char symbol; // on map
+	bool threat;
+	int direction;
 };
 
 
-
-/*public:
-	double getX();
-	double getY();
-	int getHealth();
-	int getSpeed();
-	int getDef();
-	int getAtt();
-
-	Character(std::string name);
-	virtual ~Character();
-
-	const std::string toString();
-};*/
 
 
 
@@ -77,8 +112,6 @@ private:
 	 use newHP value to change pointed to value of health
 	//enum eDirection { Up, Down, Left, Right, Stop = 0};
 	//eDirection dir;
-
 	//void move(enum dir);
-
 	//bool threat;
 	*/

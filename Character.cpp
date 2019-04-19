@@ -1,13 +1,17 @@
 #include <iostream>
 #include "Character.h"
+#include "Item.h"
+
+//#include "Item.h"
 using namespace std;
 
-Character::Character()
+// Here the Stats for Character are kept
+void Character::generateCharacter()
 {
-	this->X = 0.0;
-	this->Y = 0.0;
+	this->X = 10;
+	this->Y = 10;
 
-	//this->name = "";
+	this->playerName = "";
 	this->level = 1;
 	this->xp = 0;
 	this->xpNext = 0;
@@ -15,42 +19,117 @@ Character::Character()
 	this->hpMax = 1;
 	this->att = 1;
 	this->def = 1;
-	this->speed = 1;
-};
+	this->direction = 0;
+	// Player Icon will be first letter of name Capitalised
+	threat = true;
+	playerIcon= "T";
+}
+
+
+//This constructs the character stats
+Character::Character(std::string name, bool aggro)
+{
+	this->X = 10;
+	this->Y = 10;
+	this->playerName = name;
+	this->level = 1;
+	this->xp = 0;
+	this->xpNext = level*50;
+	this->hp = level*2+8;
+	this->hpMax = 1;
+	this->att = 1;
+	this->def = 1;
+	this->direction = 0;
+	
+	if (aggro)
+	{
+			this->threat = true;
+	}
+} 
+
+/*void Character::generateEnemy(int, bool aggro)
+{
+	this->enemyX = 17;
+	this->enemyY = 17;
+	this->enemyXp = 20;
+	this->enemyHp = 10;
+	this->enemyHpMax = 10;
+	this->enemyAtt = 1;
+	this->enemyDir = 0;
+	//this->enemyAggro = true;
+}
+
+/*void Enemy(int, bool aggro)
+{
+		this->enemyX = 17;
+		this->enemyY = 17;
+		this->enemyXp = 20;
+		this->enemyHp = 10;
+		this->enemyHpMax = 10;
+		this->enemyAtt = 1;
+		this->enemyDir = 0;
+		//this->enemyAggro = true;
+}*/
+
+
+/*int Character::enemyTakeDamage()
+{
+	
+	this-> enemyHp - (getAtt() + Weapon::GetDamage() );
+}*/
+
+/*int Character::playerTakeDamage()
+{
+	this-> hp - (getEnemyAtt() );
+}*/
+
 
 Character::~Character()
 {
 
 }
 //Functions below
+void Character::namePlayer()
+{
+	cout << "Name your hero... ";
+	cin >> this->playerName;
+}
+
+/*char Character::getPlayerIcon(string str)
+{
+	string (playerName);
+	str.at(1) = this->playerIcon;
+}*/
 
 void Character::resetStat(const std::string name)
 {
-	//this->name = "";
+	this->playerName = "";
 	this->level = 1;
 	this->xp = 0;
 	this->xpNext = level*50;
 	this->hp = 8;
 	this->hpMax = level*2+8;
-	this->att = level+1;/*weaponDamage*/
-	this->def = level+1;
-	this->speed = level+1;
-
+	this->att = level +1;
+	this->def = level +1;
+	this->threat = true;
 	this->statPoints = 0;
+	this->direction = 0;
 }
 
-/*std::string Character::getAsString() const;
+void Character::resetAggro(const std::string name)
 {
-	std::cout << "Character Stats = " << std::endl;
-	std::cout << "Name =  " << this->name << std::endl;
-	std::cout << "Level =  " << this->level << std::endl;
-	std::cout << "Current xp = "<< this-> << std::endl;
-	std::cout << "Xp to next level = " << this->xpNext << std::endl;
-	std::cout << "Current HP = " << this->hp << std::endl;
-	std::cout << "Character Stats = " << std::endl;
-	std::cout << "Character Stats = " << std::endl;
-	
-}/*
+	this->threat = true;
+}
+
+void Character::printStats() const
+{
+	cout<<"Name: " << this->playerName << endl;
+	cout<< "Level: " << this->level << endl;
+	cout<< "Xp: " << this->xp << " / " << this->xpNext << endl;
+	cout<< "Hp: " << this->hp << " / " << this->hpMax << endl;
+	cout<< "Att: " << this->att << endl;
+	cout<< "Stat Points: " << this->statPoints << endl;			
+}
 
 void Character::levelUp()
 {
@@ -61,52 +140,54 @@ void Character::levelUp()
 		this->xp = 0;
 		this->xpNext= this->level*50;
 		this->hpMax = this->level*2+8;
-		this->hp==hpMax;
+		this->hp=hpMax;
 		this->statPoints++;
+		cout << "You are now level " << this->level << "!!!" << endl;
 	}
 }
 		
 
-void createNewCharacter();
+string Character::getPlayerName()
 {
-	if (i==X && j==Y)
-	cout << "T"
-
-
-/*char Character::getName()
-{
-	return name;
-}*/
+	//cout << this->playerName << endl;
+	return playerName;
+	
+}
 
 int Character::getLevel()
 {
+	
+	//cout << this->level << endl;
 	return level;
 }
 
 int Character::getXp()
 {
+	//cout << this->xp << endl;
 	return xp;
 }
 
 int Character::getXpNext()
 {
+	//cout << this->xpNext;
 	return xpNext;
 }
 
-double Character::getX()
+int Character::getX()
 {
 	return X;
 }
 
-double Character::getY()
+int Character::getY()
 {
 	return Y;
 }
 
 int Character::getAtt()
 {
+	//cout << this->att;
 	return att;
-}
+	}
 
 int Character::getDef()
 {
@@ -118,121 +199,101 @@ int Character::getHp()
 	return hp;
 }
 
-int Character::getSpeed()
+int Character::getEnemyX()
 {
-	return speed;
+	return enemyX;
 }
 
-/*void move(void)
+int Character::getEnemyY()
 {
-	
-	if (Input.buttonpress())
+	return enemyY;
+}
+
+int Character::getEnemyXp()
+{
+	return enemyXp;
+}
+
+int Character::getEnemyHp()
+{
+	return enemyHp;
+}
+
+int Character::getEnemyHpMax()
+{
+	return enemyHpMax;
+}
+
+int Character::getEnemyAtt()
+{
+	return enemyAtt;
+}
+
+int Character::getEnemyDir()
+{
+	return enemyDir;
+}
+
+
+// Jeremy
+void Character::move()
+{
+
+	switch (direction)
 	{
-		switch (_getch())
-		{
-		case 'a':
-			dir = LEFT;
-			break;
-
-		case 'd':
-			dir = RIGHT;
-			break;
-
-		case 's':
-			dir = DOWN;
-			break;
-
-		case 'w':
-			dir = UP;
-			break;
-		}
+	case UP: 
+		this-> Y++;
+		break;
+	case DOWN:
+		this -> Y--;
+		break;
+	case LEFT:
+		this-> X--;
+		break;
+	case RIGHT:
+		this-> X++;
+		break;
+	}
 }
 
+void Character::setSymb(char symbol)
+{
+	this-> symbol = symbol;
+}
+
+int Character::getDir()
+{
+	//cout << this->direction;
+	return direction;
+
+}
+ void Character::setDir(int newDir)
+ {
+	 newDir = this->direction ;
+
+ }
+/* void Character::takeDamage(Character & me, Character & attacking , item & weapon )
+ {
+	Weapon obj(int);
 	
-void Damage()
-{
-	if (playerX == enemyX && playerY == enemyY)
-		health - 1
 
+	this->hp/obj.GetDamage()
+ }
+ */
+ 
+/*void main()
+{
+	string name;
+	Character obj(name, false);
+	&Character::generateCharacter;
+	obj.getPlayerName();
+	obj.getLevel();
+	obj.getXp();
+	obj.getAtt();
+	obj.getDir();
+
+
+	char dud;
+	cin >> dud;
 }
-
-void useWeap(void)
-{
-	//if (Input.buttonpress())
-	//{
-			switch (_getch())
-				case ' ':
-				//swing weapon adjacently
-			if dir == LEFT;
-			set weaponX == X-1;
-			set weaponY == Y;
-
-			if dir == RIGHT;
-			set weaponX == X+1;
-			set weaponY == Y;
-
-			if dir == UP;
-			set weaponX == X;
-			set weaponY == Y+1;
-
-			if dir == DOWN;
-			set weaponX == X;
-			set weaponY == Y-1;
-
-			if case !' ':
-			set weaponX == 0;
-			set weaponY == 0;
-
-}
-
-void enemyCollision(void)
-{
-	if getX ==
-
-
-	//}
 */
-
-
-/*Character::Character(std::string name)
-{
-	this->name = name;
-	this->level = 1;
-	this->exp = 0;
-	this->expNext = 10;
-	this->hp = 10;
-	this->maxHp = 10;
-
-	this->att = 1;
-	this->def = 1;
-	this->speed = 1;
-
-	//Attributes+core at beginning
-}
-
-
-const std::string Character::toString()
-{
-
-
-	//The below will all be printed to display their values at
-	//the current time
-	//Player attributes followed by aux features
-	std::stringstream ss;
-	ss << "Name = " << this->name << "\n"
-		<< "HP = " << this->hp " / " << this->maxHP << "\n"
-		<< "Att = " << this->att << "\n"
-		<< "Def = " << this->def << "\n"
-		<< "Speed = " << this->speed << "\n"
-		<< "\n"
-		<< "Level =" << this->level << "\n"
-		<< "Exp = " << this->xp << "\n"
-		<< "Exp to next = " << this->xpNext << "\n"
-		<< "\n";
-
-	return ss.str();
-
-}
-
-
-}; */
